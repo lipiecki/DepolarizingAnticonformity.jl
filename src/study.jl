@@ -79,7 +79,6 @@ function study(q::Int, Q::Int, type::Symbol, Δ::Float64=0.0, prange = 0.01:0.00
             end
         end
     end
-    println(sum(irregular))
     return c, μ, phase, prange, βrange
 end
 
