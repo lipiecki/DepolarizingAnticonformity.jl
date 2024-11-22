@@ -6,7 +6,6 @@ function study(q::Int, Q::Int, type::Symbol, Δ::Float64=0.0, prange = 0.01:0.00
     c = zeros(length(prange), length(βrange), 4)
     μ = zeros(length(prange), length(βrange))
     phase = zeros(length(prange), length(βrange))
-    irregular = zeros(length(prange), length(βrange))
     ε = (type ∈ (:static1, :static3, :dynamic3)) ? 1e-5 : 0.0
     c0 = [0.5, 0.0, 0.0, 0.5 - ε - Δ]
     if type ∈ (:dynamic1, :dynamic2, :dynamic3)
@@ -71,14 +70,8 @@ function study(q::Int, Q::Int, type::Symbol, Δ::Float64=0.0, prange = 0.01:0.00
             elseif (c1 > (c2+tol) && c2 > (c3+tol)) || (c3 > (c2+tol) && c2 > (c1+tol)) #(c1A > (c2A+tol) && c1A > (c3A+tol)) && (c1B > (c2B+tol) && c1B > (c3B+tol)) ||
                 #(c3A > (c2A+tol) && c3A > (c1A+tol)) && (c3B > (c2B+tol) && c3B > (c1B+tol))
                 phase[i, j] = 1 # pole consensus
-                if abs(c1A - c1) > tol || abs(c1B - c1) > tol || abs(c2A - c2) > tol || abs(c2B - c2) > tol || abs(c3A - c3) > tol || abs(c3B - c3) > tol
-                    irregular[i, j] = 1
-                end
             elseif c2 > (c1+tol) && c2 > (c3+tol) #(c2A > (c1A+tol) && c2A > (c3A+tol)) && (c2B > (c1B+tol) && c2B > (c3B+tol)) &&
                 phase[i, j] = 0 # middle-ground consensus
-                if abs(c1A - c1) > tol || abs(c1B - c1) > tol || abs(c2A - c2) > tol || abs(c2B - c2) > tol || abs(c3A - c3) > tol || abs(c3B - c3) > tol
-                    irregular[i, j] = 1
-                end
             else
                 phase[i, j] = -1
                 # warn if the phase is unclassified, supress the warning for sensitivity analysis
