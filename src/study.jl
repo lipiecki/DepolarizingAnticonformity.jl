@@ -61,7 +61,7 @@ function study(q::Int, Q::Int, type::Symbol, Δ::Float64=0.0, prange = 0.01:0.00
             # classify phases
             if (abs(c1A - c3A) < tol && c2A < (c1A+tol)) && (abs(c1B - c3B) < tol && c2B < (c1B+tol))
                 phase[i, j] = 4 # in-group polarization
-            elseif (c1A > (c2A+tol) && c2A > (c3A+tol)) && (c3B > (c2B+tol) && c2B > (c1B+tol))
+            elseif (c1A > (c2A+tol) && c1A > (c3A+tol)) && (c3B > (c2B+tol) && c3B > (c1B+tol))
                 if abs(c1 - c3) < tol && c2 < (c1+tol)
                     phase[i, j] = 3 # between-group polarization
                 else
