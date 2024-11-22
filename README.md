@@ -44,19 +44,19 @@ using DepolarizingAnticonformity
 q = 3
 Q = 4
 type = :dynamic1
-DepolarizingAnticonformity.runstudy(q, Q, type)
+runstudy(q, Q, type)
 ```
 
 In order to create a polarization map from the results stored in `DepolarizingAnticonformityResults/OutputFiles`, use `polarizationmap(q, Q, type)`, e.g.
 
 ```julia
-DepolarizingAnticonformity.polarizationmap(3, 4, :dynamic1)
+polarizationmap(3, 4, :dynamic1)
 ```
 
 To obtain the same results, call:
 
 ```julia
-DepolarizingAnticonformity.phasemap(3, 4, :dynamic1)
+phasemap(3, 4, :dynamic1)
 ```
 The figures are saved in `DepolarizingAnticonformityResults/Figures/Figures` (the directory is automatically created if it does not exists).
 
@@ -67,5 +67,5 @@ where $\Delta\in \{10^{-5}, 10^{-4}, 10^{-3}, 10^{-2}, 10^{-1}\}$ and $\varepsil
 
 To run the sensitivity analysis, you can try:
 ```julia
-DepolarizingAnticonformity.sensitivitymap(3, 4, :dynamic1)
+sensitivitymap(3, 4, :dynamic1)
 ```
