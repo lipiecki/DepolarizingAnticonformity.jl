@@ -36,28 +36,26 @@ The function does not return anything, but saves the output file in `Depolarizin
     - `5` for In-Group Polarization
     - (`-1` if the phase has not been classified, which will throw a warning)
 
-Below you can find and example of how to run a single study and read its results:
+Below you can find and example of how to run a single study:
 
 ```julia
-using DepolarizingAnticonformity, JLD2
+using DepolarizingAnticonformity
 q = 3
 Q = 4
 type = :dynamic1
-runstudy(q, Q, type)
-filepath = joinpath("DepolarizingAnticonformityResults", "OutputFiles", "q$(q)_Q$(Q)_$(type).jld2")
-data = load(filepath)
-polarization_index = data["polarization_index"]
+DepolarizingAnticonformity.runstudy(q, Q, type)
 ```
 
 In order to create a polarization map from the results stored in `DepolarizingAnticonformityResults/OutputFiles`, use `polarizationmap(q, Q, type)`, e.g.
 
 ```julia
-polarizationmap(3, 4, :dynamic1)
+DepolarizingAnticonformity.polarizationmap(3, 4, :dynamic1)
 ```
+
 To obtain the same results, call:
 
 ```julia
-phasemap(3, 4, :dynamic1)
+DepolarizingAnticonformity.phasemap(3, 4, :dynamic1)
 ```
 The figures are saved in `DepolarizingAnticonformityResults/Figures/Figures` (the directory is automatically created if it does not exists).
 
