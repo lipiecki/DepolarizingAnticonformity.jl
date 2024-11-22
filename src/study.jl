@@ -53,7 +53,7 @@ function study(q::Int, Q::Int, type::Symbol, Δ::Float64=0.0, prange = 0.01:0.00
             c2 = 1.0 - c1 - c3
 
             # tolerance for polarization index calculations and phase classification
-            tol = 1e-12
+            tol = 1e-8
 
             # calculate polarization index
             μ[i, j] = (1 - abs(c1 - c3))*0.5*((c1)/(c1 + c2 + tol) + (c3)/(c3 + c2 + tol)) # `tol` allows to stabilize the expression when the denominator approaches 0
