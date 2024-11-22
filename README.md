@@ -19,6 +19,7 @@ Performing the evolution of the dynamical systems corresponding to different mod
 - `type=:static1` for Conformity with BC and Anticonformity in the Static (Quenched) approach
 - `type=:static2` for Conformity without BC and Anticonformity in the Static (Quenched) approach
 - `type=:static3` for Conformity with and without BC in the Static (Quenched) approach.
+
 The function does not return anything, but saves the output file in `DepolarizingAnticonformityResults/Figures/OutputFiles` (the directory is automatically created if it does not exists). The file is in the `.jld2` format, and stores the data as a dictionary with the following key:value pairs:
 - `intervention_strength`: the vector of values describing the strength of intervention (defaults to `0.01:0.0005:0.5`)
 - `probability_outgroup`: the vector of values describing the probability of outgroup interaction (defaults to `0.01:0.0005:0.5`)
