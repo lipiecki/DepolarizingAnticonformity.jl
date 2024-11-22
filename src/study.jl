@@ -83,6 +83,7 @@ function study(q::Int, Q::Int, type::Symbol, Δ::Float64=0.0, prange = 0.01:0.00
 end
 
 function runstudy(q::Int, Q::Int, type::Symbol)
+    println("v1")
     c, μ, phase, prange, βrange = study(q, Q, type)
     save(joinpath(mkpath(joinpath("DepolarizingAnticonformityResults", "OutputFiles")), "q$(q)_Q$(Q)_$(type).jld2"), "opinion_concentration", c, "polarization_index", μ, "phase", phase, "intervention_strength", prange, "probability_outgroup", βrange)
 end
