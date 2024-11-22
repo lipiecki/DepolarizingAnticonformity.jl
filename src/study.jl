@@ -70,7 +70,7 @@ function study(q::Int, Q::Int, type::Symbol, Δ::Float64=0.0, prange = 0.01:0.00
             elseif (c1A > (c2A+tol) && c2A > (c3A+tol)) && (c1B > (c2B+tol) && c2B > (c3B+tol)) ||
                 (c3A > (c2A+tol) && c2A > (c1A+tol)) && (c3B > (c2B+tol) && c2B > (c1B+tol))
                 phase[i, j] = 1 # pole consensus
-            elseif abs(c1A - c3A) < tol && c2A < (c1A+tol) && abs(c1B - c3B) < tol && c2B < (c1B+tol)
+            elseif (c2A > (c1A+tol) && c2A > (c3A+tol)) && (c2B > (c1B+tol) && c2B > (c1B+tol))
                 phase[i, j] = 0 # middle-ground consensus
             else
                 phase[i, j] = -1
@@ -83,7 +83,7 @@ function study(q::Int, Q::Int, type::Symbol, Δ::Float64=0.0, prange = 0.01:0.00
 end
 
 function runstudy(q::Int, Q::Int, type::Symbol)
-    println("v1")
+    println("v2")
     c, μ, phase, prange, βrange = study(q, Q, type)
     save(joinpath(mkpath(joinpath("DepolarizingAnticonformityResults", "OutputFiles")), "q$(q)_Q$(Q)_$(type).jld2"), "opinion_concentration", c, "polarization_index", μ, "phase", phase, "intervention_strength", prange, "probability_outgroup", βrange)
 end
