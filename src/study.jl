@@ -67,10 +67,10 @@ function study(q::Int, Q::Int, type::Symbol, Δ::Float64=0.0, prange = 0.01:0.00
                 else
                     phase[i, j] = 2 # compromise
                 end
-            elseif (c1A > (c2A+tol) && c1A > (c3A+tol)) && (c1B > (c2B+tol) && c1B > (c3B+tol)) ||
-                (c3A > (c2A+tol) && c3A > (c1A+tol)) && (c3B > (c2B+tol) && c3B > (c1B+tol))
+            elseif (c1 > (c2+tol) && c2 > (c3+tol)) || (c3 > (c2+tol) && c2 > (c1+tol)) #(c1A > (c2A+tol) && c1A > (c3A+tol)) && (c1B > (c2B+tol) && c1B > (c3B+tol)) ||
+                #(c3A > (c2A+tol) && c3A > (c1A+tol)) && (c3B > (c2B+tol) && c3B > (c1B+tol))
                 phase[i, j] = 1 # pole consensus
-            elseif (c2A > (c1A+tol) && c2A > (c3A+tol)) && (c2B > (c1B+tol) && c2B > (c3B+tol)) && (abs(c1 - c3) < tol && c2 > (c1+tol))
+            elseif (abs(c1 - c3) < tol && c2 > (c1+tol)) #(c2A > (c1A+tol) && c2A > (c3A+tol)) && (c2B > (c1B+tol) && c2B > (c3B+tol)) &&
                 phase[i, j] = 0 # middle-ground consensus
             else
                 phase[i, j] = -1
