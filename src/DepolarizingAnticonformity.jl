@@ -10,11 +10,10 @@ include("sensitivity.jl")
 include("study.jl")
 
 export
-    model
-    study
-    runstudy
-    phasemap
-    polarizationmap
+    model,
+    study,
+    runstudy,
+    phasemap,
+    polarizationmap,
     sensitivitymap
-
 end
