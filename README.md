@@ -1,6 +1,6 @@
 # Depolarizing Power of Anticonformity
 
-`DepolarizingAnticonformity.jl` is a replication package for the preprint A. Lipiecki, K. Weron, Depolarizing Power of Anticonformity (2024).
+`DepolarizingAnticonformity.jl` is a replication package for the paper A. Lipiecki, K. Weron, Depolarizing Power of Anticonformity (2024).
 
 ## Instalation
 To install the package, use the following lines in Julia REPL:
