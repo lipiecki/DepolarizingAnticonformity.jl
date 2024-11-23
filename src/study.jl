@@ -15,7 +15,7 @@ function study(q::Int, Q::Int, type::Symbol, Δ::Float64=0.0, prange = 0.01:0.00
             p = prange[i]
             for j in eachindex(βrange)
                 β = βrange[j]
-                prob = ODEProblem(de, [0.5, 0.0, 0.0, 0.5 - ε], (0, 2T), [p, β])
+                prob = ODEProblem(de, c0, (0, 2T), [p, β])
                 sol = solve(prob, Rosenbrock23(), saveat=[T, 2T])
                 
                 for var_index in eachindex(sol(1))
