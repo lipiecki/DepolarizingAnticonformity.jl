@@ -70,17 +70,12 @@ function study(q::Int, Q::Int, type::Symbol, Δ::Float64=0.0, prange = 0.01:0.00
             elseif μA < 0.5 && μB < 0.5 && μG < 0.5
                 if (c1 > (c2-tol) && c1 > (c3-tol)) || (c3 > (c2-tol) && c3 > (c1-tol))
                     phase[i, j] = 1 # pole consensus
-                elseif abs(c1 - c3) < tol && c2 > (c1-tol)
-                    phase[i, j] = 0 # middle-ground consensus
                 else
-                   phase[i, j] = -1
-                    # warn if the phase is unclassified, supress the warning for sensitivity analysis
-                    (Δ ≈ 0.0) && @warn "unclassified phase at (p=$(prange[i]), β=$(βrange[j])) with cA=$((c1A, c2A, c3A)), cB=$((c1B, c2B, c3B)))"
-                end
+                    phase[i, j] = 0 # middle-ground consensus
             else
                 phase[i, j] = -1
                 # warn if the phase is unclassified, supress the warning for sensitivity analysis
-                (Δ ≈ 0.0) && @warn "unclassified phase at (p=$(prange[i]), β=$(βrange[j])) with cA=$((c1A, c2A, c3A)), cB=$((c1B, c2B, c3B)))"
+                @warn "unclassified phase at (p=$(prange[i]), β=$(βrange[j])) with cA=$((c1A, c2A, c3A)), cB=$((c1B, c2B, c3B)))"
             end
         end
     end
