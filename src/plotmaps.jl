@@ -7,7 +7,7 @@ end
 
 function phasemap(q::Int, Q::Int, type::Symbol)
     data = load(joinpath("DepolarizingAnticonformityResults", "OutputFiles", "q$(q)_Q$(Q)_$(type).jld2"))
-    plt = heatmap(data["intervention_strength"], data["probability_outgroup"], data["phase"]', c=cgrad(:RdBu, 5, categorical=true, rev=true), clims=(0, 4))
+    plt = heatmap(data["intervention_strength"], data["probability_outgroup"], data["phase"]', c=cgrad(:RdBu, 5, categorical=true, rev=true), clims=(1, 5))
     plot!(plt, framestyle=:grid, colorbar=true, size=(330, 300))
     mkpath(joinpath("DepolarizingAnticonformityResults", "Figures"))
     savefig(plt, joinpath(mkpath(joinpath("DepolarizingAnticonformityResults", "Figures")), "phase_q$(q)_Q$(Q)_$(type).pdf"))
