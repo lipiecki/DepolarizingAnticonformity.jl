@@ -30,12 +30,12 @@ The function does not return anything, but saves the output file in `Depolarizin
     - `3` for agents with opinion `-1` in faction `B`
     - `4` for agents with opinion `1` in faction `B`
 - `phase`: the matrix identifying the phase, where the first index corresponds to the intervention strength, and the second to probability of outgroup interaction. The phases are denoted using the following notation: 
-    - `0` for Middle-Ground Consensus
-    - `1` for Pole Consensus
-    - `2` for Compromise
-    - `3` for Between-Group Polarization
+    - `1` for Middle-Ground Consensus
+    - `2` for Pole Consensus
+    - `3` for Compromise
+    - `4` for Between-Group Polarization
     - `5` for In-Group Polarization
-    - (`-1` if the phase has not been classified, which will throw a warning)
+    - (`0` if the phase has not been classified, which will throw a warning)
 
 Below you can find and example of how to run a single study:
 
@@ -63,7 +63,7 @@ The figures are saved in `DepolarizingAnticonformityResults/Figures/Figures` (th
 ## Sensitivity analysis
 In addition to the code replicating the results presented in the paper, `DepolarizingAnticonformity.jl` provides the tool for sensitivity analysis, in the form of `sensitivitymap(q, Q, type)` function. It runs the numerical evolution of systems with shifted initial conditions and compares the phase classification against the unperturbed system. The method checks the perturbations of initial conditions in the form of:
 $$c_{0B}(0) = \varepsilon + \Delta, \quad c_{1B}(0) = \frac{1}{2} - \varepsilon - \Delta,$$
-where $\Delta\in \{10^{-5}, 10^{-4}, 10^{-3}, 10^{-2}, 10^{-1}\}$ and $\varepsilon = 10^{-5}$ is introduced to systems that exhibit symmetry breaking. The method creates a plot which colors the phase sapce by the $-\log_{10}(\Delta)$ required to introduce change: the darker the color, the higher the sensitivity of phase classification to the inital conditions.
+where $\Delta\in \{10^{-5}, 10^{-4}, 10^{-3}, 10^{-2}, 10^{-1}\}$ and $\varepsilon = 10^{-6}$ is introduced to avoid instabilities in systems that exhibit symmetry breaking. The method creates a plot which colors the phase sapce by the $-\log_{10}(\Delta)$ required to introduce change: the darker the color, the higher the sensitivity of phase classification to the inital conditions.
 
 To run the sensitivity analysis, you can try:
 ```julia
