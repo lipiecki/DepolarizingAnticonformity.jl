@@ -90,6 +90,7 @@ function study(q::Int, Q::Int, type::Symbol, Δ::Float64=0.0, prange = 0.01:0.00
     println("MGC\t| ", round(100*count(phase .== 1)/length(phase), digits=9))
     println("unknown\t| ", round(100*count(phase .== 0)/length(phase), digits=9))
     println("-"^30)
+    println()
     return c, μ, phase, prange, βrange
 end
 
