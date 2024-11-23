@@ -52,26 +52,30 @@ function study(q::Int, Q::Int, type::Symbol, Δ::Float64=0.0, prange = 0.01:0.00
             c3 = c3A + c3B
             c2 = 1.0 - c1 - c3
 
-            # tolerance for polarization index calculations and phase classification
-            tol = 1e-5
-
             # calculate polarization index
+            tol = 1e-9
             μ[i, j] = (1 - abs(c1 - c3))*0.5*((c1)/(c1 + c2 + tol) + (c3)/(c3 + c2 + tol)) # `tol` allows to stabilize the expression when the denominator approaches 0
 
+            μG = μ[i, j]
+            μA = (1 - abs(c1A - c3A))*0.5*((c1A)/(c1A + c2A + tol) + (c3A)/(c3A + c2A + tol))
+            μB = (1 - abs(c1B - c3B))*0.5*((c1B)/(c1B + c2B + tol) + (c3B)/(c3B + c2B + tol))
+                    
             # classify phases
-            if (abs(c1A - c3A) < tol && c2A < (c1A+tol)) && (abs(c1B - c3B) < tol && c2B < (c1B+tol))
+            if μA > 0.5 && μB > 0.5 && μG > 0.5
                 phase[i, j] = 4 # in-group polarization
-            elseif (c1A > (c2A-tol) && c2A > (c3A-tol)) && (c3B > (c2B-tol) && c2B > (c1B-tol))
-                if abs(c1 - c3) < tol && c2 < (c1+tol)
-                    phase[i, j] = 3 # between-group polarization
+            elseif μA < 0.5 && μB < 0.5 && μG > 0.5
+                phase[i, j] = 3 # between-group polarization
+            elseif μA > 0.5 && μB > 0.5 && μG < 0.5 && (abs(c1 - c3) < tol && c2 > (c1-tol)
+                phase[i, j] = 2 # compromise
+            elseif μA < 0.5 && μB < 0.5 && μG < 0.5
+                if (c1 > (c2-tol) && c1 > (c3-tol)) || (c3 > (c2-tol) && c3 > (c1-tol))
+                    phase[i, j] = 1 # pole consensus
+                elseif (abs(c1 - c3) < tol && c2 > (c1-tol)
+                    phase[i, j] = 0 # middle-ground consensus
                 else
-                    phase[i, j] = 2 # compromise
-                end
-            elseif (c1A > (c2A-tol) && c2A > (c3A-tol)) && (c1B > (c2B-tol) && c2B > (c3B-tol)) ||
-                (c3A > (c2A-tol) && c2A > (c1A-tol)) && (c3B > (c2B-tol) && c2B > (c1B-tol))
-                phase[i, j] = 1 # pole consensus
-            elseif c2 > (c1-tol) && c2 > (c3-tol) #(c2A > (c1A-tol) && c2A > (c3A-tol)) && (c2B > (c1B-tol) && c2B > (c1B-tol))
-                phase[i, j] = 0 # middle-ground consensus
+                   phase[i, j] = -1
+                    # warn if the phase is unclassified, supress the warning for sensitivity analysis
+                    @warn "unclassified phase at (p=$(prange[i]), β=$(βrange[j])) with cA=$((c1A, c2A, c3A)), cB=$((c1B, c2B, c3B)))"                 
             else
                 phase[i, j] = -1
                 # warn if the phase is unclassified, supress the warning for sensitivity analysis
