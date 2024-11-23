@@ -53,7 +53,7 @@ function study(q::Int, Q::Int, type::Symbol, Δ::Float64=0.0, prange = 0.01:0.00
             c2 = 1.0 - c1 - c3
 
             # tolerance for polarization index calculations and phase classification
-            tol = 1e-8
+            tol = 1e-5
 
             # calculate polarization index
             μ[i, j] = (1 - abs(c1 - c3))*0.5*((c1)/(c1 + c2 + tol) + (c3)/(c3 + c2 + tol)) # `tol` allows to stabilize the expression when the denominator approaches 0
@@ -61,16 +61,16 @@ function study(q::Int, Q::Int, type::Symbol, Δ::Float64=0.0, prange = 0.01:0.00
             # classify phases
             if (abs(c1A - c3A) < tol && c2A < (c1A+tol)) && (abs(c1B - c3B) < tol && c2B < (c1B+tol))
                 phase[i, j] = 4 # in-group polarization
-            elseif (c1A > (c2A+tol) && c2A > (c3A+tol)) && (c3B > (c2B+tol) && c2B > (c1B+tol))
+            elseif (c1A > (c2A-tol) && c2A > (c3A-tol)) && (c3B > (c2B-tol) && c2B > (c1B-tol))
                 if abs(c1 - c3) < tol && c2 < (c1+tol)
                     phase[i, j] = 3 # between-group polarization
                 else
                     phase[i, j] = 2 # compromise
                 end
-            elseif (c1A > (c2A+tol) && c2A > (c3A+tol)) && (c1B > (c2B+tol) && c2B > (c3B+tol)) ||
-                (c3A > (c2A+tol) && c2A > (c1A+tol)) && (c3B > (c2B+tol) && c2B > (c1B+tol))
+            elseif (c1A > (c2A-tol) && c2A > (c3A-tol)) && (c1B > (c2B-tol) && c2B > (c3B-tol)) ||
+                (c3A > (c2A-tol) && c2A > (c1A-tol)) && (c3B > (c2B-tol) && c2B > (c1B-tol))
                 phase[i, j] = 1 # pole consensus
-            elseif (c2A > (c1A+tol) && c2A > (c3A+tol)) && (c2B > (c1B+tol) && c2B > (c1B+tol))
+            elseif c2 > (c1-tol) && c2 > (c3-tol) #(c2A > (c1A-tol) && c2A > (c3A-tol)) && (c2B > (c1B-tol) && c2B > (c1B-tol))
                 phase[i, j] = 0 # middle-ground consensus
             else
                 phase[i, j] = -1
@@ -83,7 +83,7 @@ function study(q::Int, Q::Int, type::Symbol, Δ::Float64=0.0, prange = 0.01:0.00
 end
 
 function runstudy(q::Int, Q::Int, type::Symbol)
-    println("v2")
+    println("v3")
     c, μ, phase, prange, βrange = study(q, Q, type)
     save(joinpath(mkpath(joinpath("DepolarizingAnticonformityResults", "OutputFiles")), "q$(q)_Q$(Q)_$(type).jld2"), "opinion_concentration", c, "polarization_index", μ, "phase", phase, "intervention_strength", prange, "probability_outgroup", βrange)
 end
