@@ -72,6 +72,7 @@ function study(q::Int, Q::Int, type::Symbol, Δ::Float64=0.0, prange = 0.01:0.00
                     phase[i, j] = 1 # pole consensus
                 else
                     phase[i, j] = 0 # middle-ground consensus
+                end
             else
                 phase[i, j] = -1
                 # warn if the phase is unclassified, supress the warning for sensitivity analysis
