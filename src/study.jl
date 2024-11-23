@@ -8,16 +8,18 @@ function study(q::Int, Q::Int, type::Symbol, Δ::Float64=0.0, prange = 0.01:0.00
     phase = zeros(length(prange), length(βrange))
     ε = (type ∈ (:static1, :static3, :dynamic3)) ? 1e-5 : 0.0
     c0 = [0.5, 0.0, 0.0, 0.5 - ε - Δ]
+    tol = 1e-12
+    T = 1e12
     if type ∈ (:dynamic1, :dynamic2, :dynamic3)
         @Threads.threads for i in eachindex(prange)
             p = prange[i]
             for j in eachindex(βrange)
                 β = βrange[j]
-                prob = ODEProblem(de, [0.5, 0.0, 0.0, 0.5 - ε], (0, 2*10^12), [p, β])
-                sol = solve(prob, Rosenbrock23(), saveat=[10^12, 2*10^12])
+                prob = ODEProblem(de, [0.5, 0.0, 0.0, 0.5 - ε], (0, 2T), [p, β])
+                sol = solve(prob, Rosenbrock23(), saveat=[T, 2T])
                 
                 for var_index in eachindex(sol(1))
-                    if abs(sol(2)[var_index] - sol(1)[var_index]) > 10^(-12)
+                    if abs(sol(2)[var_index] - sol(1)[var_index]) > tol
                         @warn "System did not converge for p = $(p), and frac = $(β)" 
                     end
                 end
@@ -29,10 +31,10 @@ function study(q::Int, Q::Int, type::Symbol, Δ::Float64=0.0, prange = 0.01:0.00
             p = prange[i]
             for j in eachindex(βrange)
                 β = βrange[j]
-                prob = ODEProblem(de, [c0[1]*p, c0[2]*p, c0[1]*(1-p), c0[2]*(1-p), c0[3]*p, c0[4]*p, c0[3]*(1-p), c0[4]*(1-p)], (0, 2*10^12), [p, β])
-                sol = solve(prob, Rosenbrock23(), saveat=[10^12, 2*10^12])
+                prob = ODEProblem(de, [c0[1]*p, c0[2]*p, c0[1]*(1-p), c0[2]*(1-p), c0[3]*p, c0[4]*p, c0[3]*(1-p), c0[4]*(1-p)], (0, 2T), [p, β])
+                sol = solve(prob, Rosenbrock23(), saveat=[T, 2T])
                 for var_index in eachindex(sol(1))
-                    if abs(sol(2)[var_index] - sol(1)[var_index]) > 10^(-12)
+                    if abs(sol(2)[var_index] - sol(1)[var_index]) > tol
                         @warn "System did not converge for p = $(p), and frac = $(β)" 
                     end
                 end
@@ -53,9 +55,7 @@ function study(q::Int, Q::Int, type::Symbol, Δ::Float64=0.0, prange = 0.01:0.00
             c2 = 1.0 - c1 - c3
 
             # calculate polarization index
-            tol = 1e-9
             μ[i, j] = (1 - abs(c1 - c3))*0.5*((c1)/(c1 + c2 + tol) + (c3)/(c3 + c2 + tol)) # `tol` allows to stabilize the expression when the denominator approaches 0
-
             μG = μ[i, j]
             μA = (1 - 2*abs(c1A - c3A))*0.5*((c1A)/(c1A + c2A + tol) + (c3A)/(c3A + c2A + tol))
             μB = (1 - 2*abs(c1B - c3B))*0.5*((c1B)/(c1B + c2B + tol) + (c3B)/(c3B + c2B + tol))
