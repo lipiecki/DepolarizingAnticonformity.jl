@@ -74,7 +74,7 @@ function study(q::Int, Q::Int, type::Symbol, Δ::Float64=0.0, prange = 0.01:0.00
             end
         end
     end
-    println("q=$(q), Q=$(Q), type=$(type), Δ=$(Δ)")
+    println("\nq=$(q), Q=$(Q), type=$(type), Δ=$(Δ)")
     println("-"^30)
     println("phase\t| %")
     println("-"^30)
@@ -84,7 +84,6 @@ function study(q::Int, Q::Int, type::Symbol, Δ::Float64=0.0, prange = 0.01:0.00
     println("MGC\t| ", round(100*count(phase .== -2)/length(phase), digits=5))
     println("-"^30)
     println("unclassified states: ", round(100*count(phase .== 0)/length(phase), digits=5), "%")
-    println()
     return c, μ, phase, prange, βrange
 end
 
