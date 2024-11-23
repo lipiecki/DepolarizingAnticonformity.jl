@@ -71,11 +71,6 @@ function study(q::Int, Q::Int, type::Symbol, Δ::Float64=0.0, prange = 0.01:0.00
                 else
                     phase[i, j] = 1 # middle-ground consensus
                 end
-            elseif (μA > 0.5 || μB > 0.5) && μG < 0.5 
-                phase[i, j] = 0 # mixed
-            else
-                phase[i, j] = -1 # unclassified
-                @warn "unclassified phase at (p=$(prange[i]), β=$(βrange[j])) with cA=$((c1A, c2A, c3A)), cB=$((c1B, c2B, c3B)))"
             end
         end
     end
