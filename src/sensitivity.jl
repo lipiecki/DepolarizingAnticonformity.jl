@@ -12,7 +12,7 @@ function sensitivitymap(q::Int, Q::Int, type::Symbol)
         end
     end
     save(joinpath(mkpath(joinpath("DepolarizingAnticonformityResults", "OutputFiles")), "q$(q)_Q$(Q)_$(type).jld2"), "sensitivity", sensitivity, "prange", prange, "βrange", βrange)
-    plt = heatmap(prange, βrange, sensitivity', c = cgrad(:Blues, 6, categorical=true), clims = (0, 5))
+    plt = heatmap(prange, βrange, sensitivity', c=cgrad(:Blues, 6, categorical=true), clims=(0, 5))
     plot!(plt, framestyle=:grid, colorbar=true, size=(330, 300))
     savefig(plt, joinpath(mkpath(joinpath("DepolarizingAnticonformityResults", "Figures")), "sensitivity_q$(q)_Q$(Q)_$(type).pdf"))
 end
