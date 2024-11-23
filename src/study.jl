@@ -62,11 +62,11 @@ function study(q::Int, Q::Int, type::Symbol, Δ::Float64=0.0, prange = 0.01:0.00
                     
             # classify phases
             if μA > 0.5 && μB > 0.5 && μG > 0.5
-                phase[i, j] = 5 # in-group polarization
+                phase[i, j] = 4 # in-group polarization
             elseif μA < 0.5 && μB < 0.5 && μG > 0.5
-                phase[i, j] = 4 # between-group polarization
+                phase[i, j] = 3 # between-group polarization
             elseif μA > 0.5 && μB > 0.5 && μG < 0.5 && c2 > (c1-tol) && c2 > (c3-tol)
-                phase[i, j] = 3 # middgle-ground compromise
+                phase[i, j] = 2 # middgle-ground compromise
              elseif ((μA < 0.5 && μB > 0.5) || (μA > 0.5 && μB < 0.5)) && μG < 0.5 && (c1 > (c2-tol) && c1 > (c3-tol)) || (c3 > (c2-tol) && c3 > (c1-tol))
                 phase[i, j] = 2 # pole compromise
             elseif μA < 0.5 && μB < 0.5 && μG < 0.5
