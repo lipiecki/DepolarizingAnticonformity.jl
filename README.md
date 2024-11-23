@@ -30,12 +30,11 @@ The function does not return anything, but saves the output file in `Depolarizin
     - `3` for agents with opinion `-1` in faction `B`
     - `4` for agents with opinion `1` in faction `B`
 - `phase`: the matrix identifying the phase, where the first index corresponds to the intervention strength, and the second to probability of outgroup interaction. The phases are denoted using the following notation: 
-    - `4` for In-Group Polarization
-    - `3` for Between-Group Polarization
-    - `2` for Pole Consensus
-    - `1` for Middle-Ground Consensus
+    - `2` for In-Group Polarization
+    - `1` for Between-Group Polarization
+    - `-1` for Pole Consensus
+    - `-2` for Middle-Ground Consensus
     - `0` if the phase has not been classified
-
 Below you can find and example of how to run a single study:
 
 ```julia
