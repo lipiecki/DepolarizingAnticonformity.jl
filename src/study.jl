@@ -75,12 +75,12 @@ function study(q::Int, Q::Int, type::Symbol, Δ::Float64=0.0, prange = 0.01:0.00
                 else
                    phase[i, j] = -1
                     # warn if the phase is unclassified, supress the warning for sensitivity analysis
-                    @warn "unclassified phase at (p=$(prange[i]), β=$(βrange[j])) with cA=$((c1A, c2A, c3A)), cB=$((c1B, c2B, c3B)))"
+                    (Δ ≈ 0.0) && @warn "unclassified phase at (p=$(prange[i]), β=$(βrange[j])) with cA=$((c1A, c2A, c3A)), cB=$((c1B, c2B, c3B)))"
                 end
             else
                 phase[i, j] = -1
                 # warn if the phase is unclassified, supress the warning for sensitivity analysis
-                @warn "unclassified phase at (p=$(prange[i]), β=$(βrange[j])) with cA=$((c1A, c2A, c3A)), cB=$((c1B, c2B, c3B)))"
+                (Δ ≈ 0.0) && @warn "unclassified phase at (p=$(prange[i]), β=$(βrange[j])) with cA=$((c1A, c2A, c3A)), cB=$((c1B, c2B, c3B)))"
             end
         end
     end
