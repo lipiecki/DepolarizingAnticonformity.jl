@@ -6,10 +6,10 @@ function study(q::Int, Q::Int, type::Symbol, Δ::Float64=0.0, prange = 0.01:0.00
     c = zeros(length(prange), length(βrange), 4)
     μ = zeros(length(prange), length(βrange))
     phase = zeros(length(prange), length(βrange))
-    ε = 1e-6
-    c0 = [0.5, 0.0, 0.0, 0.5 - ε - Δ]
-    tol = 1e-12
     T = 1e12
+    tol = 1e-12
+    ε = 1e-6    
+    c0 = [0.5, 0.0, 0.0, 0.5 - ε - Δ]
     if type ∈ (:dynamic1, :dynamic2, :dynamic3)
         @Threads.threads for i in eachindex(prange)
             p = prange[i]
