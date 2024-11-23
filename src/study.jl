@@ -6,7 +6,7 @@ function study(q::Int, Q::Int, type::Symbol, Δ::Float64=0.0, prange = 0.01:0.00
     c = zeros(length(prange), length(βrange), 4)
     μ = zeros(length(prange), length(βrange))
     phase = zeros(length(prange), length(βrange))
-    ε = 1e-5#(type ∈ (:static1, :static3, :dynamic3)) ? 1e-5 : 0.0
+    ε = 1e-6#(type ∈ (:static1, :static3, :dynamic3)) ? 1e-5 : 0.0
     c0 = [0.5, 0.0, 0.0, 0.5 - ε - Δ]
     tol = 1e-12
     T = 1e12
