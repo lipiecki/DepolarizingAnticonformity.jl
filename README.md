@@ -30,12 +30,11 @@ The function does not return anything, but saves the output file in `Depolarizin
     - `3` for agents with opinion `-1` in faction `B`
     - `4` for agents with opinion `1` in faction `B`
 - `phase`: the matrix identifying the phase, where the first index corresponds to the intervention strength, and the second to probability of outgroup interaction. The phases are denoted using the following notation: 
-    - `1` for Middle-Ground Consensus
+    - `4` for In-Group Polarization
+    - `3` for Between-Group Polarization
     - `2` for Pole Consensus
-    - `3` for Compromise
-    - `4` for Between-Group Polarization
-    - `5` for In-Group Polarization
-    - (`0` if the phase has not been classified, which will throw a warning)
+    - `1` for Middle-Ground Consensus
+    - `0` if the phase has not been classified
 
 Below you can find and example of how to run a single study:
 
@@ -45,19 +44,6 @@ q = 3
 Q = 4
 type = :dynamic1
 runstudy(q, Q, type)
-#=
-q=3, Q=4, type=dynamic1, Δ=0.0
-------------------------------
-phase	| %
-------------------------------
-IGP	| 42.333282417
-BGP	| 4.215362011
-Comp	| 0.012261511
-PC	| 0.0
-MGC	| 53.439094061
-unknown	| 0.0
-------------------------------
-=#
 ```
 
 In order to create a polarization map from the results stored in `DepolarizingAnticonformityResults/OutputFiles`, use `polarizationmap(q, Q, type)`, e.g.
