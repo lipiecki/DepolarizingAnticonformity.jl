@@ -81,4 +81,4 @@ sensitivitymap(3, 4, :dynamic1)
 ```
 
 ## Note
-PLease note that due to convenience, the source codes assume a different notation for opinion values. In the paper, the three-state opinion takes the value in $\{-1, 0, 1\}$. In the codes, $\{1, 2, 3\}$ is used, so the agent cocnentrations are denoted by `c1, c2, c3, c1A, c2A, c3A, c1B, c2B, c3B`.
+Please note that due to convenience, the source codes assume a different notation for opinion values. In the paper, the three-state opinion takes the value in $\{-1, 0, 1\}$. In the codes, $\{1, 2, 3\}$ is used, so the agent cocnentrations are denoted by `c1A, c2A, c3A, c1B, c2B, c3B` and `c1, c2, c3`.
