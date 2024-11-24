@@ -18,7 +18,7 @@ function study(q::Int, Q::Int, type::Symbol; Δ::Float64=0.0, intervention_stren
                 prob = ODEProblem(de, c0, (T, 2T), (p, β))
                 sol = solve(prob, Rosenbrock23(), saveat=(T, 2T))
                 sum(abs(sol.u[1] .- sol.u[2]) < tol || @warn "System did not converge for p = $(p), and β = $(β)" # stationarity test
-                c[i, j, :] .= @view(sol.u[2])
+                c[i, j, :] .= sol.u[2]
             end
         end
     else # calculations for the static approach
