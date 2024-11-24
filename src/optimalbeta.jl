@@ -1,8 +1,8 @@
 function optimalbeta(q::Int, Q::Int)
     for (no, type) in enumerate((:dynamic2, :static2))
         data = load(joinpath("DepolarizingAnticonformityResults", "OutputFiles", "q$(q)_Q$(Q)_$(type).jld2"))
-        βc = 0.0
-        p = 1.0
+        βc = 1.01
+        p = 1.01
         for i in axes(data["polarization_index"], 1)
             for j in axes(data["polarization_index"], 2)
                 if data["phase"][i, j] == -2
@@ -17,18 +17,17 @@ function optimalbeta(q::Int, Q::Int)
     end
     type = :dynamic1
     data = load(joinpath("DepolarizingAnticonformityResults", "OutputFiles", "q$(q)_Q$(Q)_$(type).jld2"))
-    βl, βu = 0.0, 0.0
-    p = 1.0
+    βl, βu = 1.01, 1.01
+    p = 1.01
     for i in axes(data["polarization_index"], 1)
         for j in axes(data["polarization_index"], 2)
             if data["phase"][i, j] == -2
-                if (data["intervention_strength"][i] ≈ p)
-                    βu = data["probability_outgroup"][j]
-                elseif data["intervention_strength"][i] < p
-                    βl = data["probability_outgroup"][j]
+                if (data["intervention_strength"][i] < p)
+                    βu = max(βu, data["probability_outgroup"][j])
+                    βl = min(βl, data["probability_outgroup"][j])
                 end
             end
         end
     end
-    println("Optimal β for $(type): [$(βu), $("βu")")
+    println("Optimal β for $(type): [$(βl), $(βu)]")
 end
