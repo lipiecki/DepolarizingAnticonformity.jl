@@ -15,8 +15,8 @@ function study(q::Int, Q::Int, type::Symbol; Δ::Float64=0.0, intervention_stren
             p = intervention_strength[i]
             for j in eachindex(probability_outgroup)
                 β = probability_outgroup[j]
-                prob = ODEProblem(de, c0, (T, 2T), (p, β))
-                sol = solve(prob, Rosenbrock23(), saveat=(T, 2T))
+                prob = ODEProblem(de, c0, (T/10, T), (p, β))
+                sol = solve(prob, Rosenbrock23(), saveat=[T/10, T])
                 for var in 1:4
                      abs(sol.u[1][var] - sol.u[2][var]) < tol || @warn "System did not converge for p = $(p), and β = $(β)" # stationarity test
                 end
@@ -28,8 +28,8 @@ function study(q::Int, Q::Int, type::Symbol; Δ::Float64=0.0, intervention_stren
             p = intervention_strength[i]
             for j in eachindex(probability_outgroup)
                 β = probability_outgroup[j]
-                prob = ODEProblem(de, [c0[1]*p, c0[2]*p, c0[1]*(1-p), c0[2]*(1-p), c0[3]*p, c0[4]*p, c0[3]*(1-p), c0[4]*(1-p)], (T, 2T), (p, β))
-                sol = solve(prob, Rosenbrock23(), saveat=(T, 2T))
+                prob = ODEProblem(de, [c0[1]*p, c0[2]*p, c0[1]*(1-p), c0[2]*(1-p), c0[3]*p, c0[4]*p, c0[3]*(1-p), c0[4]*(1-p)], (T/10, T), (p, β))
+                sol = solve(prob, Rosenbrock23(), saveat=[T/10, T])
                 for var in 1:8
                      abs(sol.u[1][var] - sol.u[2][var]) < tol || @warn "System did not converge for p = $(p), and β = $(β)" # stationarity test
                 end
