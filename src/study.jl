@@ -15,10 +15,13 @@ function study(q::Int, Q::Int, type::Symbol; Δ::Float64=0.0, intervention_stren
             p = intervention_strength[i]
             for j in eachindex(probability_outgroup)
                 β = probability_outgroup[j]
-                prob = ODEProblem(de, c0, (0, T), [p, β])
+                prob = ODEProblem(de, c0, (0, T), (p, β))
                 sol = solve(prob, Rosenbrock23(), save_everystep=false)
-                (sum(abs.(sol.du)) < tol) || @warn "System did not converge for p = $(p), and β = $(β)" # stationarity test
-                c[i, j, :] .= @view(sol.u[1:4])
+                # stationarity test
+                du = ones(4)
+                de(du, sol.u[2], (p, β), 0)
+                (sum(abs.(du)) < tol) || @warn "System did not converge for p = $(p), and β = $(β)" 
+                c[i, j, :] .= @view(sol.u[2][1:4])
             end
         end
     else # calculations for the static approach
@@ -26,13 +29,16 @@ function study(q::Int, Q::Int, type::Symbol; Δ::Float64=0.0, intervention_stren
             p = intervention_strength[i]
             for j in eachindex(probability_outgroup)
                 β = probability_outgroup[j]
-                prob = ODEProblem(de, [c0[1]*p, c0[2]*p, c0[1]*(1-p), c0[2]*(1-p), c0[3]*p, c0[4]*p, c0[3]*(1-p), c0[4]*(1-p)], (0, T), [p, β])
+                prob = ODEProblem(de, [c0[1]*p, c0[2]*p, c0[1]*(1-p), c0[2]*(1-p), c0[3]*p, c0[4]*p, c0[3]*(1-p), c0[4]*(1-p)], (0, T), (p, β))
                 sol = solve(prob, Rosenbrock23(), save_everystep=false)
-                (sum(abs.(sol.du)) < tol) || @warn "System did not converge for p = $(p), and β = $(β)" # stationarity test
-                c[i, j, 1] = sol.u[1] + sol.u[3] 
-                c[i, j, 2] = sol.u[2] + sol.u[4]
-                c[i, j, 3] = sol.u[5] + sol.u[7]
-                c[i, j, 4] = sol.u[6] + sol.u[8]
+                # stationarity test
+                du = ones(8)
+                de(du, sol.u[2], (p, β), 0)
+                (sum(abs.(du)) < tol) || @warn "System did not converge for p = $(p), and β = $(β)" 
+                c[i, j, 1] = sol.u[2][1] + sol.u[2][3] 
+                c[i, j, 2] = sol.u[2][2] + sol.u[2][4]
+                c[i, j, 3] = sol.u[2][5] + sol.u[2][7]
+                c[i, j, 4] = sol.u[2][6] + sol.u[2][8]
             end
         end
     end
