@@ -17,8 +17,8 @@ function study(q::Int, Q::Int, type::Symbol; Δ::Float64=0.0, intervention_stren
                 β = probability_outgroup[j]
                 prob = ODEProblem(de, c0, (T, 2T), (p, β))
                 sol = solve(prob, Rosenbrock23(), saveat=(T, 2T))
-                (sum(abs.(sol.u[1] .- sol.u[2])) < tol) || @warn "System did not converge for p = $(p), and β = $(β)" # stationarity test
-                c[i, j, :] .= @view(sol.u[2][1:4])
+                all(abs.(sol.u[1] .- sol.u[2]) < tol) || @warn "System did not converge for p = $(p), and β = $(β)" # stationarity test
+                c[i, j, :] .= @view(sol.u[2])
             end
         end
     else # calculations for the static approach
@@ -28,7 +28,7 @@ function study(q::Int, Q::Int, type::Symbol; Δ::Float64=0.0, intervention_stren
                 β = probability_outgroup[j]
                 prob = ODEProblem(de, [c0[1]*p, c0[2]*p, c0[1]*(1-p), c0[2]*(1-p), c0[3]*p, c0[4]*p, c0[3]*(1-p), c0[4]*(1-p)], (T, 2T), (p, β))
                 sol = solve(prob, Rosenbrock23(), saveat=(T, 2T))
-                (sum(abs.(sol.u[1] .- sol.u[2])) < tol) || @warn "System did not converge for p = $(p), and β = $(β)" # stationarity test
+                all(abs.(sol.u[1] .- sol.u[2]) < tol) || @warn "System did not converge for p = $(p), and β = $(β)" # stationarity test
                 c[i, j, 1] = sol.u[2][1] + sol.u[2][3] 
                 c[i, j, 2] = sol.u[2][2] + sol.u[2][4]
                 c[i, j, 3] = sol.u[2][5] + sol.u[2][7]
