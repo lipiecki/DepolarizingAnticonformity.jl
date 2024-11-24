@@ -80,6 +80,7 @@ To run the sensitivity analysis, you can try:
 sensitivitymap(3, 4, :dynamic1)
 ```
 This will print the classification summary and save the plot (as well as the .jld2 file allowing to replicate the plot). The example sensitivity map (obtained for `q=3, Q=4, type=:static1` is presented below:
+
 ![sensitivity_q3_Q4_static1](https://github.com/user-attachments/assets/69afc2ed-6a7a-4b80-bac5-719a323560a3)
 
 
