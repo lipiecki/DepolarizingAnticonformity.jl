@@ -80,7 +80,8 @@ To run the sensitivity analysis, you can try:
 sensitivitymap(3, 4, :dynamic1)
 ```
 This will print the classification summary and save the plot (as well as the .jld2 file allowing to replicate the plot). The example sensitivity map (obtained for `q=3, Q=4, type=:static1` is presented below:
-[sensitivity_q3_Q4_static1.pdf](https://github.com/user-attachments/files/17894210/sensitivity_q3_Q4_static1.pdf)
+![sensitivity_q3_Q4_static1](https://github.com/user-attachments/assets/69afc2ed-6a7a-4b80-bac5-719a323560a3)
+
 
 ## Note
 Please note that due to convenience, the notation for opinion values used in the source code differes from the one in the paper. The three-state ranked opinion can take the value of 1, 2 or 3, and the variables `c1A, c2A, c3A, c1B, c2B, c3B` correspond to the concentrations of agents.
