@@ -10,7 +10,7 @@ function optimalbeta(q::Int, Q::Int)
                     if data["intervention_strength"][i] < p - 1e-9
                         optimalβu[no] = data["probability_outgroup"][j]
                         p = data["intervention_strength"][i]
-                    if data["intervention_strength"][i] ≈ p
+                    elseif data["intervention_strength"][i] ≈ p
                         optimalβl[no] = data["probability_outgroup"][j]
                     end
                 end
