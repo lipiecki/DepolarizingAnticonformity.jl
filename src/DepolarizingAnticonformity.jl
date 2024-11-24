@@ -17,5 +17,5 @@ export
     optimalbeta,
     phasemap,
     polarizationmap,
-    sensitivitymap,
+    sensitivitymap
 end
