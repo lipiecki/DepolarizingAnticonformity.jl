@@ -12,7 +12,7 @@ julia> Pkg.add(url = "https://github.com/lipiecki/DepolarizingAnticonformity.jl"
 There is no need to download the repository manually, you can install it directly to your Julia environment.
 
 ## Numerical evolution of the system
-Performing the evolution of the dynamical systems corresponding to different model specifications is done by a single function call. `runstudy(q::Int, Q::Int, type::Symbol)` performs the the entire study for specified values of `q` and `Q` (as described in the paper) and of the six examined model specifications, specified by `type`:
+Performing the evolution of the dynamical systems corresponding to different model specifications is done by a single function call. `runstudy(q::Int, Q::Int, type::Symbol)` performs the the entire study for specified `q` and `Q` (as described in the paper) and model specification `type`, which can take one of the following values:
 - `type=:dynamic1` for Conformity with BC and Anticonformity in the Dynamic (Annealed) approach
 - `type=:dynamic2` for Conformity without BC and Anticonformity in the Dynamic (Annealed) approach
 - `type=:dynamic3` for Conformity with and without BC in the Dynamic (Annealed) approach
