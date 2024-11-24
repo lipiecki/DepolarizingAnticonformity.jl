@@ -1,5 +1,5 @@
 function check_stability(de, u, p, tol)
-    du = ones(u)
+    du = ones(length(u))
     de(du, u, p, 0)
     return sum(abs.(du)) < tol
 end
