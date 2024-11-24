@@ -7,7 +7,7 @@ function study(q::Int, Q::Int, type::Symbol; Δ::Float64=0.0, intervention_stren
     μ = zeros(length(intervention_strength), length(probability_outgroup)) # array for storing stationary polarization index
     phase = zeros(length(intervention_strength), length(probability_outgroup)) # array for storing phase signature
     T = 1e12 # number of timesteps for ODE solver
-    tol = 1e-12 # tolerance for stationarity test, polarization index calculations and phase classification
+    tol = 1e-12 # tolerance for stability test, polarization index calculations and phase classification
     ε = 1e-6 # shift in initial conditions allowing to avoid instability in the case of symmetry breaking
     c0 = [0.5, 0.0, 0.0, 0.5 - ε - Δ]
     if type ∈ (:dynamic1, :dynamic2, :dynamic3) # calculations for the dynamic approach
@@ -16,13 +16,9 @@ function study(q::Int, Q::Int, type::Symbol; Δ::Float64=0.0, intervention_stren
             for j in eachindex(probability_outgroup)
                 β = probability_outgroup[j]
                 prob = ODEProblem(de, c0, (0, T), [p, β])
-                sol = solve(prob, Rosenbrock23(), saveat=[T/2, T])
-                for var_index in eachindex(sol(1)) # stationarity test
-                    if abs(sol(2)[var_index] - sol(1)[var_index]) > tol
-                        @warn "System did not converge for p = $(p), and frac = $(β)" 
-                    end
-                end
-                c[i, j, :] .= @view(sol(2)[1:4])
+                sol = solve(prob, Rosenbrock23(), save_everystep=false)
+                (sum(abs.(sol.du)) < tol) || @warn "System did not converge for p = $(p), and β = $(β)" # stationarity test
+                c[i, j, :] .= @view(sol.u[1:4])
             end
         end
     else # calculations for the static approach
@@ -31,16 +27,12 @@ function study(q::Int, Q::Int, type::Symbol; Δ::Float64=0.0, intervention_stren
             for j in eachindex(probability_outgroup)
                 β = probability_outgroup[j]
                 prob = ODEProblem(de, [c0[1]*p, c0[2]*p, c0[1]*(1-p), c0[2]*(1-p), c0[3]*p, c0[4]*p, c0[3]*(1-p), c0[4]*(1-p)], (0, T), [p, β])
-                sol = solve(prob, Rosenbrock23(), saveat=[T/2, T])
-                for var_index in eachindex(sol(1)) # stationarity test
-                    if abs(sol(2)[var_index] - sol(1)[var_index]) > tol
-                        @warn "System did not converge for p = $(p), and frac = $(β)" 
-                    end
-                end
-                c[i, j, 1] = sol(2)[1] + sol(2)[3] 
-                c[i, j, 2] = sol(2)[2] + sol(2)[4]
-                c[i, j, 3] = sol(2)[5] + sol(2)[7]
-                c[i, j, 4] = sol(2)[6] + sol(2)[8]
+                sol = solve(prob, Rosenbrock23(), save_everystep=false)
+                (sum(abs.(sol.du)) < tol) || @warn "System did not converge for p = $(p), and β = $(β)" # stationarity test
+                c[i, j, 1] = sol.u[1] + sol.u[3] 
+                c[i, j, 2] = sol.u[2] + sol.u[4]
+                c[i, j, 3] = sol.u[5] + sol.u[7]
+                c[i, j, 4] = sol.u[6] + sol.u[8]
             end
         end
     end
