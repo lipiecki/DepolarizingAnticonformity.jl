@@ -43,6 +43,18 @@ q = 3
 Q = 4
 type = :dynamic1
 runstudy(q, Q, type)
+#=
+q=3, Q=4, type=dynamic1, Δ=0.0
+------------------------------
+phase	| %
+------------------------------
+IGP	| 42.33328
+BGP	| 4.21536
+PC	| 0.0
+MGC	| 53.43909
+------------------------------
+unclassified states: 0.01226%
+=#
 ```
 
 In order to create a polarization map from the results stored in `DepolarizingAnticonformityResults/OutputFiles`, use `polarizationmap(q, Q, type)`, e.g.
