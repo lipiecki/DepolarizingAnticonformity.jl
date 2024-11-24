@@ -1,9 +1,3 @@
-function check_stability(de, u, p, tol)
-    du = ones(length(u))
-    de(du, u, p, 0)
-    return sum(abs.(du)) < tol
-end
-
 function study(q::Int, Q::Int, type::Symbol; Δ::Float64=0.0, intervention_strength::StepRangeLen{Float64}=0.01:0.0005:0.5, probability_outgroup::StepRangeLen{Float64}=0.01:0.0005:0.5)
     Q > 0 || error("incorrect value of Q")
     (q <= Q && q > floor(Q/2)) || error("incorrect value of q")
@@ -26,7 +20,6 @@ function study(q::Int, Q::Int, type::Symbol; Δ::Float64=0.0, intervention_stren
                 for var in 1:4 # stationarity test
                     abs(sol.u[1][var] - sol.u[2][var]) < tol || @warn "System did not converge for p = $(p), and β = $(β) with the difference of $(abs(sol.u[1][var] - sol.u[2][var]))"
                 end
-                check_stability(de, sol.u[2], [p, β], tol) || @warn "Derivatives are non-zero for p = $(p), and β = $(β)"
                 c[i, j, :] .= sol.u[2]
             end
         end
@@ -40,7 +33,6 @@ function study(q::Int, Q::Int, type::Symbol; Δ::Float64=0.0, intervention_stren
                 for var in 1:8 # stationarity test
                     abs(sol.u[1][var] - sol.u[2][var]) < tol || @warn "System did not converge for p = $(p), and β = $(β) with the difference of $(abs(sol.u[1][var] - sol.u[2][var]))"
                 end
-                check_stability(de, sol.u[2], [p, β], tol) || @warn "Derivatives are non-zero for p = $(p), and β = $(β)"
                 c[i, j, 1] = sol.u[2][1] + sol.u[2][3] 
                 c[i, j, 2] = sol.u[2][2] + sol.u[2][4]
                 c[i, j, 3] = sol.u[2][5] + sol.u[2][7]
