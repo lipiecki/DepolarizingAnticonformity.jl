@@ -6,8 +6,8 @@ function optimalbeta(q::Int, Q::Int)
         for i in axes(data["polarization_index"], 1)
             for j in axes(data["polarization_index"], 2)
                 if data["phase"][i, j] == -2
-                    if !(data["intervention_strength"][i] ≈ p) && data["intervention_strength"][i] < p 
-                        βc = data["probability_outgroup"][j]
+                    if data["intervention_strength"][i] < p - 1e-12
+                        βc = min(βc, data["probability_outgroup"][j]
                         p = data["intervention_strength"][i]
                     end
                 end
@@ -22,9 +22,10 @@ function optimalbeta(q::Int, Q::Int)
     for i in axes(data["polarization_index"], 1)
         for j in axes(data["polarization_index"], 2)
             if data["phase"][i, j] == -2
-                if (data["intervention_strength"][i] < p)
+                if data["intervention_strength"][i] < p - 1e-12
                     βl = min(βl, data["probability_outgroup"][j])
                     βu = max(βu, data["probability_outgroup"][j])
+                    p = data["intervention_strength"][i] 
                 end
             end
         end
