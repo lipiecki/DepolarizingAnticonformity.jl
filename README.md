@@ -77,9 +77,9 @@ where $\Delta\in$ { $10^{-5}, 10^{-4}, 10^{-3}, 10^{-2}, 10^{-1}$ } and $\vareps
 
 To run the sensitivity analysis, you can try:
 ```julia
-sensitivitymap(3, 4, :dynamic1)
+sensitivitymap(3, 4, :static1)
 ```
-This will print the classification summary and save the plot (as well as the .jld2 file allowing to replicate the plot). The example sensitivity map (obtained for `q=3, Q=4, type=:static1` is presented below:
+This will print the classification summary and save the plot (as well as the .jld2 file allowing to replicate the plot). The example sensitivity map (obtained from the code snippet above) is presented below:
 
 ![sensitivity_q3_Q4_static1](https://github.com/user-attachments/assets/69afc2ed-6a7a-4b80-bac5-719a323560a3)
 
