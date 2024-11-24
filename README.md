@@ -73,7 +73,7 @@ The figures are saved in `DepolarizingAnticonformityResults/Figures/Figures` (th
 ## Sensitivity analysis
 In addition to the code replicating the results presented in the paper, `DepolarizingAnticonformity.jl` provides the tool for sensitivity analysis, in the form of `sensitivitymap(q, Q, type)` function. It runs the numerical evolution of systems with shifted initial conditions and compares the phase classification against the unperturbed system. The method checks the perturbations of initial conditions in the form of:
 $$c_{0B}(0) = \varepsilon + \Delta, \quad c_{1B}(0) = \frac{1}{2} - \varepsilon - \Delta,$$
-where $\Delta\in \{10^{-5}, 10^{-4}, 10^{-3}, 10^{-2}, 10^{-1}\}$ and $\varepsilon = 10^{-6}$ is introduced to avoid instabilities in systems that exhibit symmetry breaking. The method creates a plot which colors the phase sapce by the $-\log_{10}(\Delta)$ required to introduce change: the darker the color, the higher the sensitivity of phase classification to the inital conditions.
+where $\Delta\in {10^{-5}, 10^{-4}, 10^{-3}, 10^{-2}, 10^{-1}\}$ and $\varepsilon = 10^{-6}$ is introduced to avoid instabilities in systems that exhibit symmetry breaking. The method creates a plot which colors the phase sapce by the $-\log_{10}(\Delta)$ required to introduce change: the darker the color, the higher the sensitivity of phase classification to the inital conditions.
 
 To run the sensitivity analysis, you can try:
 ```julia
