@@ -38,7 +38,7 @@ The function prints the summary of phase classification and saves the output fil
 Below you can find and example of how to run a single study:
 
 ```julia
-using DepolarizingAnticonformity
+using DepolarizingAnticonformity # loads the package
 q = 3
 Q = 4
 type = :dynamic1
