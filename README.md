@@ -20,14 +20,9 @@ Performing the evolution of the dynamical systems corresponding to different mod
 - `type=:static2` for Conformity without BC and Anticonformity in the Static (Quenched) approach
 - `type=:static3` for Conformity with and without BC in the Static (Quenched) approach.
 
-The following optional keyword arguments can be provided to `runstudy(q, Q, type)`:
-- `shift::Float64`: the value of petrurbation in initial conditions used for [sensitivy analysis](#sensitivity-analysis) (defaults to `0.0`)
-- `intervention_strength::AbstractVector{Float64}`: the vector of values describing the strength of intervention (defaults to `0.01:0.0005:0.5`)
-- `probability_outgroup::AbstractVector{Float64}`: the vector of values describing the probability of outgroup interaction (defaults to `0.01:0.0005:0.5`)
-
 The function prints the summary of phase classification and saves the output file in `DepolarizingAnticonformityResults/Figures/OutputFiles` (the directory is automatically created if it does not exists). The file is in the `.jld2` format, and stores the data as a dictionary with the following key:value pairs:
-- `intervention_strength`: the vector of values describing the strength of intervention
-- `probability_outgroup`: the vector of values describing the probability of outgroup interaction
+- `intervention_strength`: the vector of values describing the strength of intervention (`0.01:0.0005:0.5` by default)
+- `probability_outgroup`: the vector of values describing the probability of outgroup interaction (`0.01:0.0005:0.5` by default)
 - `polarization_index`: the matrix of polarization index values, where the first index corresponds to the intervention strength, and the second to probability of outgroup interaction
 - `opinion_concentration`: the three-dimensional array of stationary opinion concentrations, where the first index corresponds to the intervention strength, the second to probability of outgroup interaction and the third specifies agent types: 
     - `1` for agents with opinion `-1` in faction `A`
