@@ -83,10 +83,10 @@ function study(q::Int, Q::Int, type::Symbol; shift::Float64=0.0, intervention_st
     println("MGC\t| ", round(100*count(phase .== -2)/length(phase), digits=5))
     println("-"^30)
     println("unclassified states: ", round(100*count(phase .== 0)/length(phase), digits=5), "%")
-    return c, μ, phase, intervention_strength, probablity_outgroup
+    return c, μ, phase, intervention_strength, probability_outgroup
 end
 
 function runstudy(q::Int, Q::Int, type::Symbol; kwargs...)
-    c, μ, phase, intervention_strength, probablity_outgroup = study(q, Q, type; kwargs...)
-    save(joinpath(mkpath(joinpath("DepolarizingAnticonformityResults", "OutputFiles")), "q$(q)_Q$(Q)_$(type).jld2"), "opinion_concentration", c, "polarization_index", μ, "phase", phase, "intervention_strength", intervention_strength, "probability_outgroup", probablity_outgroup)
+    c, μ, phase, intervention_strength, probability_outgroup = study(q, Q, type; kwargs...)
+    save(joinpath(mkpath(joinpath("DepolarizingAnticonformityResults", "OutputFiles")), "q$(q)_Q$(Q)_$(type).jld2"), "opinion_concentration", c, "polarization_index", μ, "phase", phase, "intervention_strength", intervention_strength, "probability_outgroup", probability_outgroup)
 end
