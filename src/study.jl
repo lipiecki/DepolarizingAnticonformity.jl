@@ -1,24 +1,23 @@
-function study(q::Int, Q::Int, type::Symbol, Δ::Float64=0.0, prange = 0.01:0.0005:0.5, βrange = 0.01:0.0005:0.5)
+function study(q::Int, Q::Int, type::Symbol, Δ::Float64=0.0, prange=0.01:0.0005:0.5, βrange=0.01:0.0005:0.5)
     Q > 0 || error("incorrect value of Q")
     (q <= Q && q > floor(Q/2)) || error("incorrect value of q")
     type ∈ (:dynamic1, :dynamic2, :dynamic3, :static1, :static2, :static3)
-    de = model(q, Q, Val(type))
-    c = zeros(length(prange), length(βrange), 4)
-    μ = zeros(length(prange), length(βrange))
-    phase = zeros(length(prange), length(βrange))
-    T = 1e12
-    tol = 1e-12
-    ε = 1e-6    
+    de = model(q, Q, Val(type)) # generate the system of differential equations
+    c = zeros(length(prange), length(βrange), 4) # array for storing stationary opinion concentrations
+    μ = zeros(length(prange), length(βrange)) # array for storing stationary polarization index
+    phase = zeros(length(prange), length(βrange)) # array for storing phase signature
+    T = 1e12 # number of timesteps for ODE solver
+    tol = 1e-12 # tolerance for stationarity test, polarization index calculations and phase classification
+    ε = 1e-6 # shift in initial conditions allowing to avoid instability in the case of symmetry breaking
     c0 = [0.5, 0.0, 0.0, 0.5 - ε - Δ]
-    if type ∈ (:dynamic1, :dynamic2, :dynamic3)
+    if type ∈ (:dynamic1, :dynamic2, :dynamic3) # calculations for the dynamic approach
         @Threads.threads for i in eachindex(prange)
             p = prange[i]
             for j in eachindex(βrange)
                 β = βrange[j]
                 prob = ODEProblem(de, c0, (0, 2T), [p, β])
                 sol = solve(prob, Rosenbrock23(), saveat=[T, 2T])
-                
-                for var_index in eachindex(sol(1))
+                for var_index in eachindex(sol(1)) # stationarity test
                     if abs(sol(2)[var_index] - sol(1)[var_index]) > tol
                         @warn "System did not converge for p = $(p), and frac = $(β)" 
                     end
@@ -26,14 +25,14 @@ function study(q::Int, Q::Int, type::Symbol, Δ::Float64=0.0, prange = 0.01:0.00
                 c[i, j, :] .= @view(sol(2)[1:4])
             end
         end
-    else
+    else # calculations for the static approach
         @Threads.threads for i in eachindex(prange)
             p = prange[i]
             for j in eachindex(βrange)
                 β = βrange[j]
                 prob = ODEProblem(de, [c0[1]*p, c0[2]*p, c0[1]*(1-p), c0[2]*(1-p), c0[3]*p, c0[4]*p, c0[3]*(1-p), c0[4]*(1-p)], (0, 2T), [p, β])
                 sol = solve(prob, Rosenbrock23(), saveat=[T, 2T])
-                for var_index in eachindex(sol(1))
+                for var_index in eachindex(sol(1)) # stationarity test
                     if abs(sol(2)[var_index] - sol(1)[var_index]) > tol
                         @warn "System did not converge for p = $(p), and frac = $(β)" 
                     end
