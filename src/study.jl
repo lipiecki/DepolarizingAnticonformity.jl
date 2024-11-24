@@ -6,7 +6,7 @@ function study(q::Int, Q::Int, type::Symbol; Δ::Float64=0.0, intervention_stren
     c = zeros(length(intervention_strength), length(probability_outgroup), 4) # array for storing stationary opinion concentrations
     μ = zeros(length(intervention_strength), length(probability_outgroup)) # array for storing stationary polarization index
     phase = zeros(length(intervention_strength), length(probability_outgroup)) # array for storing phase signature
-    T = 1e12 # number of timesteps for ODE solver
+    T = 1e15 # number of timesteps for ODE solver
     tol = 1e-12 # tolerance for the stationarity test, polarization index calculations and phase classification
     ε = 1e-6 # shift in initial conditions allowing to avoid instability in the case of symmetry breaking
     c0 = [0.5, 0.0, 0.0, 0.5 - ε - Δ]
@@ -18,9 +18,7 @@ function study(q::Int, Q::Int, type::Symbol; Δ::Float64=0.0, intervention_stren
                 prob = ODEProblem(de, c0, (0, T), [p, β])
                 sol = solve(prob, Rosenbrock23(), saveat=[T/10, T])
                 for var in 1:4 # stationarity test
-                    if abs(sol.u[1][var] - sol.u[2][var]) > tol 
-                        @warn "System did not converge for p = $(p) and β = $(β) with the difference of $(abs(sol.u[1][var] - sol.u[2][var]))"
-                    end
+                    abs(sol.u[1][var] - sol.u[2][var]) < tol || @warn "System did not converge for p = $(p), and β = $(β) with the difference of $(abs(sol.u[1][var] - sol.u[2][var]))"
                 end
                 c[i, j, :] .= sol.u[2]
             end
@@ -33,9 +31,7 @@ function study(q::Int, Q::Int, type::Symbol; Δ::Float64=0.0, intervention_stren
                 prob = ODEProblem(de, [c0[1]*p, c0[2]*p, c0[1]*(1-p), c0[2]*(1-p), c0[3]*p, c0[4]*p, c0[3]*(1-p), c0[4]*(1-p)], (0, T), [p, β])
                 sol = solve(prob, Rosenbrock23(), saveat=[T/10, T])
                 for var in 1:8 # stationarity test
-                    if abs(sol.u[1][var] - sol.u[2][var]) > tol 
-                        @warn "System did not converge for p = $(p), and β = $(β) with the difference of $(abs(sol.u[1][var] - sol.u[2][var]))"
-                    end
+                    abs(sol.u[1][var] - sol.u[2][var]) < tol || @warn "System did not converge for p = $(p), and β = $(β) with the difference of $(abs(sol.u[1][var] - sol.u[2][var]))"
                 end
                 c[i, j, 1] = sol.u[2][1] + sol.u[2][3] 
                 c[i, j, 2] = sol.u[2][2] + sol.u[2][4]
