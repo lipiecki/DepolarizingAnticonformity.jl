@@ -15,7 +15,7 @@ function optimalbeta(q::Int, Q::Int)
         end
     end
     println("Optimal β for $(type): [$(βl), $(βu)]")
-    for (no, type) in enumerate((:dynamic2, :static2))
+    for type in enumerate((:dynamic2, :static2))
         data = load(joinpath("DepolarizingAnticonformityResults", "OutputFiles", "q$(q)_Q$(Q)_$(type).jld2"))
         βc = 1.01
         p = 1.01
