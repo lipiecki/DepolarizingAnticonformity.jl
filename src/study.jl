@@ -1,4 +1,4 @@
-function study(q::Int, Q::Int, type::Symbol, Δ::Float64=0.0, prange=0.01:0.0005:0.99, βrange=0.01:0.0005:0.99)
+function study(q::Int, Q::Int, type::Symbol, Δ::Float64=0.0, prange=0.01:0.0005:0.5, βrange=0.01:0.0005:0.5)
     Q > 0 || error("incorrect value of Q")
     (q <= Q && q > floor(Q/2)) || error("incorrect value of q")
     type ∈ (:dynamic1, :dynamic2, :dynamic3, :static1, :static2, :static3)
