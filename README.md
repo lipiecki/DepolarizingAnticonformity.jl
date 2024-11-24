@@ -24,7 +24,7 @@ The following optional keyword arguments can be provided to `runstudy(q, Q, type
 - `shift::Float64`: the value of petrurbation in initial conditions (defaults to `0.0`), used for [sensitivy analysis](#sensitivity-analysis)
 - `intervention_strength::AbstractVector{Float64}`: the vector of values describing the strength of intervention (defaults to `0.01:0.0005:0.5`)
 - `probability_outgroup::AbstractVector{Float64}`: the vector of values describing the probability of outgroup interaction (defaults to `0.01:0.0005:0.5`)
-- 
+
 The function prints the summary of phase classification and saves the output file in `DepolarizingAnticonformityResults/Figures/OutputFiles` (the directory is automatically created if it does not exists). The file is in the `.jld2` format, and stores the data as a dictionary with the following key:value pairs:
 - `intervention_strength`: the vector of values describing the strength of intervention
 - `probability_outgroup`: the vector of values describing the probability of outgroup interaction
