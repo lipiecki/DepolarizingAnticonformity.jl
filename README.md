@@ -25,10 +25,10 @@ The function prints the summary of phase classification and saves the output fil
 - `probability_outgroup`: the vector of values describing the probability of outgroup interaction (`0.01:0.0005:0.5` by default)
 - `polarization_index`: the matrix of polarization index values, where the first index corresponds to the intervention strength, and the second to probability of outgroup interaction
 - `opinion_concentration`: the three-dimensional array of stationary opinion concentrations, where the first index corresponds to the intervention strength, the second to probability of outgroup interaction and the third specifies agent types: 
-    - `1` for agents with opinion `-1` in faction `A`
-    - `2` for agents with opinion `1` in faction `A`
-    - `3` for agents with opinion `-1` in faction `B`
-    - `4` for agents with opinion `1` in faction `B`
+    - `1` for agents in faction `A` holding opinion `-1`
+    - `2` for agents in faction `A` holding opinion `1`
+    - `3` for agents in faction `B` holding opinion `-1`
+    - `4` for agents in faction `B` holding opinion `1`
 - `phase`: the matrix identifying the phase, where the first index corresponds to the intervention strength, and the second to probability of outgroup interaction. The phases are denoted using the following notation: 
     - `2` for In-Group Polarization
     - `1` for Between-Group Polarization
@@ -79,3 +79,6 @@ To run the sensitivity analysis, you can try:
 ```julia
 sensitivitymap(3, 4, :dynamic1)
 ```
+
+## Note
+PLease note that due to convenience, the source codes assume a different notation for opinion values. In the paper, the three-state opinion takes the value in $\{-1, 0, 1\}$. In the codes, $\{1, 2, 3\}$ is used, so the agent cocnentrations are denoted by `c1, c2, c3, c1A, c2A, c3A, c1B, c2B, c3B`.
