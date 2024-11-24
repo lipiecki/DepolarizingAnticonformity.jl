@@ -81,4 +81,4 @@ sensitivitymap(3, 4, :dynamic1)
 ```
 
 ## Note
-Please note that due to convenience, the notation for opinion values used in the source code differes from the one in the paper. The three-state ranked opinion can take the value of { $1, 2, 3$ }, and the agent concentrations are denoted by `c1A, c2A, c3A, c1B, c2B, c3B`.
+Please note that due to convenience, the notation for opinion values used in the source code differes from the one in the paper. The three-state ranked opinion can take the value of 1, 2 or 3, and the variables `c1A, c2A, c3A, c1B, c2B, c3B` correspond to agent concentrations.
