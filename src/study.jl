@@ -1,4 +1,4 @@
-function study(q::Int, Q::Int, type::Symbol; shift::Float64=0.0, intervention_strength::AbstractVector{Float64}=0.01:0.0005:0.5, probability_outgroup::AbstractVector{Float64}=0.01:0.0005:0.5)
+function study(q::Int, Q::Int, type::Symbol; Δ::Float64, intervention_strength::StepRangeLen{Float64}=0.01:0.0005:0.5, probability_outgroup::StepRangeLen{Float64}=0.01:0.0005:0.5)
     Q > 0 || error("incorrect value of Q")
     (q <= Q && q > floor(Q/2)) || error("incorrect value of q")
     type ∈ (:dynamic1, :dynamic2, :dynamic3, :static1, :static2, :static3)
@@ -9,7 +9,7 @@ function study(q::Int, Q::Int, type::Symbol; shift::Float64=0.0, intervention_st
     T = 1e12 # number of timesteps for ODE solver
     tol = 1e-12 # tolerance for stationarity test, polarization index calculations and phase classification
     ε = 1e-6 # shift in initial conditions allowing to avoid instability in the case of symmetry breaking
-    c0 = [0.5, 0.0, 0.0, 0.5 - ε - shift]
+    c0 = [0.5, 0.0, 0.0, 0.5 - ε - Δ]
     if type ∈ (:dynamic1, :dynamic2, :dynamic3) # calculations for the dynamic approach
         @Threads.threads for i in eachindex(intervention_strength)
             p = intervention_strength[i]
@@ -73,7 +73,7 @@ function study(q::Int, Q::Int, type::Symbol; shift::Float64=0.0, intervention_st
             end
         end
     end
-    println("\nq=$(q), Q=$(Q), type=$(type), shift=$(shift)")
+    println("\nq=$(q), Q=$(Q), type=$(type), Δ=$(Δ)")
     println("-"^30)
     println("phase\t| %")
     println("-"^30)
@@ -86,7 +86,7 @@ function study(q::Int, Q::Int, type::Symbol; shift::Float64=0.0, intervention_st
     return c, μ, phase, intervention_strength, probability_outgroup
 end
 
-function runstudy(q::Int, Q::Int, type::Symbol; kwargs...)
-    c, μ, phase, intervention_strength, probability_outgroup = study(q, Q, type; kwargs...)
+function runstudy(q::Int, Q::Int, type::Symbol)
+    c, μ, phase, intervention_strength, probability_outgroup = study(q, Q, type)
     save(joinpath(mkpath(joinpath("DepolarizingAnticonformityResults", "OutputFiles")), "q$(q)_Q$(Q)_$(type).jld2"), "opinion_concentration", c, "polarization_index", μ, "phase", phase, "intervention_strength", intervention_strength, "probability_outgroup", probability_outgroup)
 end
