@@ -21,7 +21,7 @@ function model(q::Int, Q::Int, ::Val{:dynamic1})
     SB3 = SB3*")"
 
     def = """
-    \tfunction f(du, u, p, t)
+    \tfunction f!(du, u, p, t)
     \t\tc1A = u[1]
     \t\tc3A = u[2]
     \t\tc1B = u[3]
