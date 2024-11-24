@@ -19,7 +19,7 @@ function study(q::Int, Q::Int, type::Symbol; Δ::Float64=0.0, intervention_stren
                 sol = solve(prob, Rosenbrock23(), save_everystep=false)
                 # stationarity test
                 du = ones(4)
-                de(du, sol.u[2], (p, β), 0)
+                de(du, copy(sol.u[2]), (p, β), 0)
                 (sum(abs.(du)) < tol) || @warn "System did not converge for p = $(p), and β = $(β)" 
                 c[i, j, :] .= @view(sol.u[2][1:4])
             end
@@ -33,7 +33,7 @@ function study(q::Int, Q::Int, type::Symbol; Δ::Float64=0.0, intervention_stren
                 sol = solve(prob, Rosenbrock23(), save_everystep=false)
                 # stationarity test
                 du = ones(8)
-                de(du, sol.u[2], (p, β), 0)
+                de(du, copy(sol.u[2]), (p, β), 0)
                 (sum(abs.(du)) < tol) || @warn "System did not converge for p = $(p), and β = $(β)" 
                 c[i, j, 1] = sol.u[2][1] + sol.u[2][3] 
                 c[i, j, 2] = sol.u[2][2] + sol.u[2][4]
