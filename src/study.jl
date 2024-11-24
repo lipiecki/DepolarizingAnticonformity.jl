@@ -1,20 +1,20 @@
-function study(q::Int, Q::Int, type::Symbol, Δ::Float64=0.0, prange=0.0005:0.0005:0.5, βrange=0.0005:0.0005:0.5)
+function study(q::Int, Q::Int, type::Symbol; shift::Float64=0.0, intervention_strength::AbstractVector{Float64}=0.0005:0.0005:0.5, probability_outgroup::AbstractVector{Float64}=0.0005:0.0005:0.5)
     Q > 0 || error("incorrect value of Q")
     (q <= Q && q > floor(Q/2)) || error("incorrect value of q")
     type ∈ (:dynamic1, :dynamic2, :dynamic3, :static1, :static2, :static3)
     de = model(q, Q, Val(type)) # generate the system of differential equations
-    c = zeros(length(prange), length(βrange), 4) # array for storing stationary opinion concentrations
-    μ = zeros(length(prange), length(βrange)) # array for storing stationary polarization index
-    phase = zeros(length(prange), length(βrange)) # array for storing phase signature
+    c = zeros(length(intervention_strength), length(probability_outgroup), 4) # array for storing stationary opinion concentrations
+    μ = zeros(length(intervention_strength), length(probability_outgroup)) # array for storing stationary polarization index
+    phase = zeros(length(intervention_strength), length(probability_outgroup)) # array for storing phase signature
     T = 1e12 # number of timesteps for ODE solver
     tol = 1e-12 # tolerance for stationarity test, polarization index calculations and phase classification
     ε = 1e-6 # shift in initial conditions allowing to avoid instability in the case of symmetry breaking
-    c0 = [0.5, 0.0, 0.0, 0.5 - ε - Δ]
+    c0 = [0.5, 0.0, 0.0, 0.5 - ε - shift]
     if type ∈ (:dynamic1, :dynamic2, :dynamic3) # calculations for the dynamic approach
-        @Threads.threads for i in eachindex(prange)
-            p = prange[i]
-            for j in eachindex(βrange)
-                β = βrange[j]
+        @Threads.threads for i in eachindex(intervention_strength)
+            p = intervention_strength[i]
+            for j in eachindex(probability_outgroup)
+                β = probability_outgroup[j]
                 prob = ODEProblem(de, c0, (0, 2T), [p, β])
                 sol = solve(prob, Rosenbrock23(), saveat=[T, 2T])
                 for var_index in eachindex(sol(1)) # stationarity test
@@ -26,10 +26,10 @@ function study(q::Int, Q::Int, type::Symbol, Δ::Float64=0.0, prange=0.0005:0.00
             end
         end
     else # calculations for the static approach
-        @Threads.threads for i in eachindex(prange)
+        @Threads.threads for i in eachindex(intervention_strength)
             p = prange[i]
-            for j in eachindex(βrange)
-                β = βrange[j]
+            for j in eachindex(probability_outgroup)
+                β = probability_outgroup[j]
                 prob = ODEProblem(de, [c0[1]*p, c0[2]*p, c0[1]*(1-p), c0[2]*(1-p), c0[3]*p, c0[4]*p, c0[3]*(1-p), c0[4]*(1-p)], (0, 2T), [p, β])
                 sol = solve(prob, Rosenbrock23(), saveat=[T, 2T])
                 for var_index in eachindex(sol(1)) # stationarity test
@@ -44,8 +44,8 @@ function study(q::Int, Q::Int, type::Symbol, Δ::Float64=0.0, prange=0.0005:0.00
             end
         end
     end
-    for i in eachindex(prange)
-        for j in eachindex(βrange)
+    for i in eachindex(intervention_strength)
+        for j in eachindex(probability_outgroup)
             c1A, c3A, c1B, c3B = @view(c[i, j, :])
             c2A = 0.5 - c1A - c3A
             c2B = 0.5 - c1B - c3B
@@ -73,7 +73,7 @@ function study(q::Int, Q::Int, type::Symbol, Δ::Float64=0.0, prange=0.0005:0.00
             end
         end
     end
-    println("\nq=$(q), Q=$(Q), type=$(type), Δ=$(Δ)")
+    println("\nq=$(q), Q=$(Q), type=$(type), shift=$(shift)")
     println("-"^30)
     println("phase\t| %")
     println("-"^30)
@@ -83,10 +83,10 @@ function study(q::Int, Q::Int, type::Symbol, Δ::Float64=0.0, prange=0.0005:0.00
     println("MGC\t| ", round(100*count(phase .== -2)/length(phase), digits=5))
     println("-"^30)
     println("unclassified states: ", round(100*count(phase .== 0)/length(phase), digits=5), "%")
-    return c, μ, phase, prange, βrange
+    return c, μ, phase, intervention_strength, probablity_outgroup
 end
 
-function runstudy(q::Int, Q::Int, type::Symbol)
-    c, μ, phase, prange, βrange = study(q, Q, type)
-    save(joinpath(mkpath(joinpath("DepolarizingAnticonformityResults", "OutputFiles")), "q$(q)_Q$(Q)_$(type).jld2"), "opinion_concentration", c, "polarization_index", μ, "phase", phase, "intervention_strength", prange, "probability_outgroup", βrange)
+function runstudy(q::Int, Q::Int, type::Symbol; kwargs...)
+    c, μ, phase, intervention_strength, probablity_outgroup = study(q, Q, type; kwargs...)
+    save(joinpath(mkpath(joinpath("DepolarizingAnticonformityResults", "OutputFiles")), "q$(q)_Q$(Q)_$(type).jld2"), "opinion_concentration", c, "polarization_index", μ, "phase", phase, "intervention_strength", intervention_strength, "probability_outgroup", probablity_outgroup)
 end
