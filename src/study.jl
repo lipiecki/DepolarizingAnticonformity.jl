@@ -15,7 +15,7 @@ function study(q::Int, Q::Int, type::Symbol; Δ::Float64=0.0, intervention_stren
             p = intervention_strength[i]
             for j in eachindex(probability_outgroup)
                 β = probability_outgroup[j]
-                prob = ODEProblem(de, c0, (0, T), (p, β))
+                prob = ODEProblem(de, c0, (T/10, T), (p, β))
                 sol = solve(prob, Rosenbrock23(), saveat=(T/10, T))
                 (sum(abs.(sol.u[1] .- sol.u[2])) < tol) || @warn "System did not converge for p = $(p), and β = $(β)" # stationarity test
                 c[i, j, :] .= @view(sol.u[2][1:4])
