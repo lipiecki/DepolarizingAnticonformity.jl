@@ -1,5 +1,21 @@
 # Depolarizing Power of Anticonformity
-`DepolarizingAnticonformity.jl` is a replication package for the paper A. Lipiecki, K. Weron, Depolarizing Power of Anticonformity (2025).
+`DepolarizingAnticonformity.jl` is a replication package for the paper [*Depolarizing Power of Anticonformity*, A. Lipiecki & K. Weron (2025)](https://doi.org/10.1016/j.eswa.2025.127879).
+
+Preprint version is openly available in [WORMS](https://worms.pwr.edu.pl/RePEc/ahh/wpaper/WORMS_25_03.pdf)
+
+If you find this repository useful in your research, please consider adding the following citation:
+```bibtex
+@article{lipiecki:sznajdweron:2025,
+    title = {Depolarizing power of anticonformity},
+    journal = {Expert Systems with Applications},
+    volume = {285},
+    pages = {127879},
+    year = {2025},
+    issn = {0957-4174},
+    doi = {10.1016/j.eswa.2025.127879},
+    author = {Arkadiusz Lipiecki and Katarzyna Sznajd-Weron}
+}
+```
 
 ## Installation
 To install the package, use the following lines in Julia REPL:
